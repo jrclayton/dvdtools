@@ -12,7 +12,7 @@ if [[ $# -eq '0' ]] || [[ $# -eq '1' ]] || [[ $# -eq '2' ]] ||
    [[ $1 = '-cf' && $# -ne '6' && $# -ne '7' ]]
 then
 	echo -e "Usage: dvdrip [switch] MOVIENAME YEAR ... \n \
-Select mode: either -a for all, -t for titles or -c for chapters or -i to change input source (add 'f' to merge chapters) \n \
+Select mode: either -a for all, -t for titles, -c for chapters or -i to change input source (add 'f' to merge chapters) \n \
 -a  MOVIENAME YEAR --CLIOPTIONS \n \
 -t  MOVIENAME YEAR TITLE_START TITLE_END --CLIOPTIONS \n \
 -c  MOVIENAME YEAR TITLE START_CHAPTER END_CHAPTER --CLIOPTIONS \n \
