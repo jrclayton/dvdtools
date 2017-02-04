@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 # Bash Script to Rip all audio, video and subtitle tracks from a DVD using the HandBrakeCLI
-# Script based on my GUI preset 
+# Script based on my GUI preset
+
+# requires: HandBrakeCLI
+# optional: terminal-notifier, say (Mac OS X)
 
 # Check for arguments
 if [[ $# -eq '0' ]] || [[ $# -eq '1' ]] || [[ $# -eq '2' ]] ||
