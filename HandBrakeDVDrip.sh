@@ -29,7 +29,7 @@ fi
 # identify the proper disk drive du moment
 DVD=$(mount | grep udf | cut -d ' ' -f 1)
 
-# To rip individual chapters from a single title
+# To rip individual chapters from a single title as multiple files
 if [ $1 = '-c' ]
 then
 	for i in `seq $5 $6`
@@ -44,7 +44,7 @@ then
 	exit 0
 fi
 
-# To rip individual chapters from a single title
+# To rip individual chapters from a single title "fused" together as a single file
 if [ $1 = '-cf' ]
 then
     HandBrakeCLI --verbose=1 --markers --title $4 --chapters $5-$6  --min-duration 4 --format av_mkv --encoder x264 --quality 20.0 --vfr --x264-preset slow --h264-profile high --h264-level 4.0 --audio 1,2,3,4,5,6,7,8,9 --aencoder copy ffaac--audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 --arate Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto --ab 192,192,192,192,192,192,192,192,192 --decomb --loose-anamorphic --modulus 2 --subtitle scan,1,2,3,4,5,6,7,8,9,10 --native-language eng --subtitle-forced scan $7 -i $DVD -o ~/Desktop/"$2"\ \($3\)/"$2"\ \($3\)\ -\ $4-fused-$5-$6.mkv
