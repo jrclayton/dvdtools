@@ -1,2 +1,2 @@
-# myprojects
-a collection of my scripts i deem useful enough to share
+# DVD Tools
+A Collection of DVD and AV tools for automation and conversion workflows
