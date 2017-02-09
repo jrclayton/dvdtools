@@ -81,7 +81,7 @@ if [ $1 = '-a' ]
 then
 	# First get the number of titles on the disk by doing a scan (HB CLI and -t 0)
 	RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i $DVD 2>&1 >/dev/null)
-	
+	echo $RAWOUT | grep -Eao "\\+ title [0-9]+"	
 	# return a list of usable titles to plug into a for loop	
 	for i in `echo $RAWOUT | grep -Eao "\\+ title [0-9]+" | cut -d ' ' -f 3`
 	do 
@@ -113,7 +113,7 @@ if [ $1 = '--iso' ]
 then
 	# First get the number of titles on the disk by doing a scan (HB CLI and -t 0)
 	RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i $2 2>&1 >/dev/null)
-	
+	echo $RAWOUT | grep -Eao "\\+ title [0-9]+"
 	# make an appropriately named folder
 	mkdir ~/Desktop/"$3"\ \($4\)
 	
