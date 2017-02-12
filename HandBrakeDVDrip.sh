@@ -29,10 +29,13 @@ fi
 DVD=$(mount | grep udf | cut -d ' ' -f 1)
 
 # test for a DVD
-if [ -z "$DVD" ]
+if ! [ $1 = '--iso' ] && ! [ $1 = '-i' ]
 then
-    echo "There is no disc mounted."
-    exit 1
+	if [ -z "$DVD" ]
+	then
+		echo "There is no disc mounted."
+		exit 1
+	fi
 fi
 
 # make an appropriately named folder on the desktop
@@ -97,7 +100,7 @@ fi
 # To convert a FILE to mkv using template settings
 if [ $1 = '-i' ]; then
 
-HandBrakeCLI --verbose=1 --markers --min-duration 4 --format av_mkv --encoder x264 --quality 20.0 --vfr --x264-preset slow --h264-profile high --h264-level 4.0 --audio 1,2,3,4,5,6,7,8,9 --aencoder copy ffaac--audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 --arate Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto --ab 192,192,192,192,192,192,192,192,192 --decomb --loose-anamorphic --modulus 2 --subtitle scan,1,2,3,4,5,6,7,8,9,10 --native-language eng --subtitle-forced scan $5 -i "$2" -o ~/Desktop/"$3"\ -\ "$4".mkv
+HandBrakeCLI --verbose=1 --markers --min-duration 4 --format av_mkv --encoder x264 --quality 20.0 --vfr --x264-preset slow --h264-profile high --h264-level 4.0 --audio 1,2,3,4,5,6,7,8,9 --aencoder copy ffaac--audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 --arate Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto --ab 192,192,192,192,192,192,192,192,192 --decomb --loose-anamorphic --modulus 2 --subtitle scan,1,2,3,4,5,6,7,8,9,10 --native-language eng --subtitle-forced scan $5 -i "$2" -o ~/Desktop/"$3"\ -\ \("$4"\).mkv
 
 # Notifications
 echo "Finished converting $3 to MKV"
