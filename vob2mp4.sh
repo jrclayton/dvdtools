@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Some commands to convert VOB to mp4 or mkv with ffmpeg
 

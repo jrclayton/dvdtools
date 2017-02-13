@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # My little script to convert VOBSUB image-based subtitle streams from an mov file
 # into srt output (e.g. for YouTube or Plex)
