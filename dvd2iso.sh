@@ -28,11 +28,6 @@
 
 ### Automated version of script ###
 
-# DvdAuthor 7 and up needs this
-# export VIDEO_FORMAT=NTSC
-# Change to "ntsc" if you'd like to create NTSC discs
-# format="ntsc"
-
 # Check for dependencies
 missing=0
 dependencies=( "dvdbackup" "dvdauthor" "mkisofs" "cdrecord" )
