@@ -10,7 +10,7 @@
 
 # Combine VOB files into full length movie
 
-# Demux VOB and repackage as MPEG - no quality loss or compression
+# Stream copy VOB and repackage as MPEG - no quality loss or compression
 #ffmpeg -i input.vob -c:v copy -c:a copy output.mpg
 
 # Encode mp4 with the H.264 video codec (better than default quality, 18 vs. 23)
@@ -18,14 +18,16 @@
 #ffmpeg -i input.vob -c:v libx264 -crf 18 -b:a 384k -c:a aac -strict -2 output.mp4
 
 # Single line solution that copies all audio tracks and all video tracks
-#ffmpeg -i concat:VTS_01_1.VOB\|VTS_01_2.VOB\|VTS_01_3.VOB\|VTS_01_4.VOB -map 0:v -map 0:a -c:v libx264 -crf 18 -b:a 192k -c:a aac -strict -2 -threads 0 -preset veryslow ~/Desktop/output.mp4
+#ffmpeg -i concat:VTS_01_1.VOB\|VTS_01_2.VOB\|VTS_01_3.VOB\|VTS_01_4.VOB -c:a aac -b:a 192k -strict -2 -preset slow ~/Desktop/output.mp4
 
-# Single line solution as above that adds subtitles
-# NEVER FIGURED THIS OUT
-#ffmpeg -fflags genpts -analyzeduration 100000k -probesize 100000k -i concat:VTS_01_1.VOB\|VTS_01_2.VOB\|VTS_01_3.VOB\|VTS_01_4.VOB -map 0:v -map 0:a -map 0:s -c:v libx264 -#crf 0 -b:a 192k -c:a aac -strict -2 -c:s copy ~/Desktop/output2.mkv
+###
+
+# To Do: Rewrite the script to take as arguments the number of the titleset
+# and the number of files comprising it as inputs
+
+###
 
 
-### Automated version of above script ###
 
 # Check we have enough command line arguments
 if [ $# -lt 1 ]
@@ -70,9 +72,10 @@ done
 
 emphasise "Converting to VOBs to mp4"
 
+# concat and convert each titleset
 for var in "$@"
 do
-	ffmpeg -i concat:VTS_01_1.VOB\|VTS_01_2.VOB\|VTS_01_3.VOB\|VTS_01_4.VOB -map 0:v -map 0:a -c:v libx264 -crf 18 -b:a 192k -c:a aac -strict -2 -threads 0 -preset slow ~/Desktop/output.mp4
+	ffmpeg -i concat:"List|Of|Files" -c:a aac -b:a 192k -strict -2 -preset slow ~/Desktop/output.mp4
     if [ $? != 0 ]
     then
         emphasise "Conversion failed"
