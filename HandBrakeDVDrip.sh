@@ -111,22 +111,22 @@ fi
 
 # The following options require a scan before ripping
 
-# First get the number of titles on the disk by doing a scan (HB CLI and -t 0) and send STDERR to STDIN so it can be grepped
-RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i $DVD 2>&1)
-
 # output of the scan option
 if [ $1 = '-s' ]; then
-	# gives a nice summary of the scan including info about all streams
+    # First get the number of titles on the disk by doing a scan (HB CLI and -t 0) and send STDERR to STDIN so it can be grepped
+    RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i $DVD 2>&1)
+    # gives a nice summary of the scan including info about all streams
 	echo "$RAWOUT" | sed -nE '/libhb\: scan thread found [0-9]+ valid title\(s\)/,$p' | tee ~/Desktop/"$2"-\($3\)-scan.txt
 	exit 0
 fi
 
-# Generate numerical list of titles for loops
-TITLES=$(echo $RAWOUT | grep -Eao "\\+ title [0-9]+" | cut -d ' ' -f 3)
-
 # To rip ALL titles
 if [ $1 = '-a' ]; then
-	# return a list of usable titles to plug into a for loop	
+    # First get the number of titles on the disk by doing a scan (HB CLI and -t 0) and send STDERR to STDIN so it can be grepped
+    RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i $DVD 2>&1)
+    # Generate numerical list of titles for loops
+    TITLES=$(echo $RAWOUT | grep -Eao "\\+ title [0-9]+" | cut -d ' ' -f 3)
+    # return a list of usable titles to plug into a for loop
 	for i in $TITLES
 	
 	do 
@@ -142,6 +142,10 @@ fi
 
 # To rip all titles from a VIDEO_TS or .ISO file
 if [ $1 = '--iso' ]; then
+    # First get the number of titles on the disk by doing a scan (HB CLI and -t 0) and send STDERR to STDIN so it can be grepped
+    RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i "$1" 2>&1)
+    # Generate numerical list of titles for loops
+    TITLES=$(echo $RAWOUT | grep -Eao "\\+ title [0-9]+" | cut -d ' ' -f 3)
 	# return a list of usable titles to plug into a for loop
 	for i in $TITLES
 	
