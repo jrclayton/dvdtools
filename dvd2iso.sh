@@ -59,7 +59,7 @@ DVD=$(mount | grep udf | cut -d ' ' -f 1)
 emphasise "Making a local mirror of disc with dvdbackup"
 
 # Make a local decrypted copy of the disc
-dvdbackup -i $DVD -o ~/Desktop/temp -M -n "$DISC_NAME"
+dvdbackup -i $DVD -o ~/Desktop/ -M -n "$DISC_NAME"
 
 if [ $? != 0 ]
 then
@@ -69,7 +69,7 @@ fi
 
 emphasise "Creating ISO image"
 
-mkisofs -V "$DISC_NAME" -dvd-video -udf -o /Volumes/Multimedia/ISOs/"$DISC_NAME".iso ~/Desktop/temp/"$DISC_NAME"
+mkisofs -V "$DISC_NAME" -dvd-video -udf -o ~/Desktop/"$DISC_NAME".iso ~/Desktop/"$DISC_NAME"
 
 if [ $? != 0 ]
 then
@@ -80,14 +80,14 @@ fi
 emphasise "ISO image created from backup directory"
 
 ### Everything passed. Cleanup and burn DVD
-cdrecord -v -sao speed=1 "$DISC_NAME".iso
-if [ $? != 0 ]
-then
-	emphasise "cdrecord non-zero exit status"
-exit 4
-fi
+#cdrecord -v -sao speed=1 ~/Desktop/"$DISC_NAME".iso
+#if [ $? != 0 ]
+#then
+#	emphasise "cdrecord non-zero exit status"
+#exit 4
+#fi
 
 # Cleanup
-rm -rf ~/Desktop/temp/"$DISC_NAME"
+rm -rf ~/Desktop/"$DISC_NAME"
 
 emphasise "Success! DVD Burned!"
