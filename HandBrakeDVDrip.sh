@@ -113,8 +113,9 @@ fi
 
 # To do a simple scan and summary of the DVD or a directory or iso
 if [ $1 = '-s' ]; then
+    if [ -e $DVD ]; then SOURCE=$DVD; else SOURCE=$2; fi
     # First get the number of titles on the disk by doing a scan (HB CLI and -t 0) and send STDERR to STDIN so it can be grepped
-    RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i $2 2>&1)
+    RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i $SOURCE 2>&1)
     # gives a nice summary of the scan including info about all streams
 	echo "$RAWOUT" | sed -nE '/libhb\: scan thread found [0-9]+ valid title\(s\)/,$p' | tee ~/Desktop/"$3"-scan.txt
 	exit 0
