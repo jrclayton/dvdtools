@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+# TO DO : BUG - Fails if ISO mounted to desktop ie more than one result from udf grep
+
 # Bash Script to Rip all audio, video and subtitle tracks from a DVD using the HandBrakeCLI
-# Script based on my GUI preset 
+# Script based on my GUI preset
 
 # Check for arguments
 if [[ $# -eq '0' ]] || [[ $# -eq '1' ]] || [[ $# -eq '2' ]] ||
@@ -145,7 +147,7 @@ fi
 # Also can take DVD/dvd, ISO/iso as FILE/file as $2
 
 if [ $1 = '-is' ]; then
-    if [ $2 = 'dvd' ] || [ $2 = 'DVD' ]; then
+    if [ $3 = 'dvd' ] || [ $3 = 'DVD' ]; then
         SOURCE=$DVD
         # First get the number of titles on the disk by doing a scan
         RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i $SOURCE 2>&1)
@@ -155,31 +157,31 @@ if [ $1 = '-is' ]; then
         for t in $TITLES
 	
         do
-            HandBrakeCLI --verbose=1 --markers --title $t --min-duration 4 --format av_mkv	--encoder x264 --quality 20.0 --vfr --x264-preset slow --h264-profile high --h264-level 4.0 --audio 1,2,3,4,5,6,7,8,9 --aencoder copy ffaac--audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 --arate Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto --ab 192,192,192,192,192,192,192,192,192 --decomb --loose-anamorphic --modulus 2 --subtitle scan,1,2,3,4,5,6,7,8,9,10 --native-language eng --subtitle-forced scan $5 -i $SOURCE -o ~/Desktop/"$3"\ \($4\)/"$3"\ \($4\)\ -\ $t.mkv
+            HandBrakeCLI --verbose=1 --markers --title $t --min-duration 4 --format av_mkv	--encoder x264 --quality 20.0 --vfr --x264-preset slow --h264-profile high --h264-level 4.0 --audio 1,2,3,4,5,6,7,8,9 --aencoder copy ffaac--audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 --arate Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto --ab 192,192,192,192,192,192,192,192,192 --decomb --loose-anamorphic --modulus 2 --subtitle scan,1,2,3,4,5,6,7,8,9,10 --native-language eng --subtitle-forced scan $6 -i $SOURCE -o ~/Desktop/"$4"\ \($5\)/"$4"\ \($5\)\ -\ $t.mkv
         done
 	
         # Notifications
-        echo "Finished ripping all streams from $3"
-        terminal-notifier -message "Finished ripping all streams from $3" -title "Terminal" -subtitle "dvdrip" -sound default -appIcon Documents/Personal_Documents/icons/dvdrip-2.png
-        say -v Samantha "Finished ripping all streams from $3"
+        echo "Finished ripping all streams from $4"
+        terminal-notifier -message "Finished ripping all streams from $4" -title "Terminal" -subtitle "dvdrip" -sound default -appIcon Documents/Personal_Documents/icons/dvdrip-2.png
+        say -v Samantha "Finished ripping all streams from $4"
         exit 0
     else
         SOURCE=$2
         # First get the number of titles on the disk by doing a scan
-        RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i $SOURCE 2>&1)
+        RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i "$SOURCE" 2>&1)
         # Generate numerical list of titles for loops
         TITLES=$(echo "$RAWOUT" | grep -Eao "\\+ title [0-9]+" | cut -d ' ' -f 3)
         # return a list of usable titles to plug into a for loop
         for t in $TITLES
 
         do
-            HandBrakeCLI --verbose=1 --markers --title $t --min-duration 4 --format av_mkv	--encoder x264 --quality 20.0 --vfr --x264-preset slow --h264-profile high --h264-level 4.0 --audio 1,2,3,4,5,6,7,8,9 --aencoder copy ffaac--audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 --arate Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto --ab 192,192,192,192,192,192,192,192,192 --decomb --loose-anamorphic --modulus 2 --subtitle scan,1,2,3,4,5,6,7,8,9,10 --native-language eng --subtitle-forced scan $5 -i $SOURCE -o ~/Desktop/"$3"\ \($4\)/"$3"\ \($4\)\ -\ $t.mkv
+            HandBrakeCLI --verbose=1 --markers --title $t --min-duration 4 --format av_mkv	--encoder x264 --quality 20.0 --vfr --x264-preset slow --h264-profile high --h264-level 4.0 --audio 1,2,3,4,5,6,7,8,9 --aencoder copy ffaac--audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 --arate Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto --ab 192,192,192,192,192,192,192,192,192 --decomb --loose-anamorphic --modulus 2 --subtitle scan,1,2,3,4,5,6,7,8,9,10 --native-language eng --subtitle-forced scan $6 -i "$SOURCE" -o ~/Desktop/"$4"\ \($5\)/"$4"\ \($5\)\ -\ $t.mkv
         done
 
         # Notifications
-        echo "Finished ripping all streams from $3"
-        terminal-notifier -message "Finished ripping all streams from $3" -title "Terminal" -subtitle "dvdrip" -sound default -appIcon Documents/Personal_Documents/icons/dvdrip-2.png
-        say -v Samantha "Finished ripping all streams from $3"
+        echo "Finished ripping all streams from $4"
+        terminal-notifier -message "Finished ripping all streams from $4" -title "Terminal" -subtitle "dvdrip" -sound default -appIcon Documents/Personal_Documents/icons/dvdrip-2.png
+        say -v Samantha "Finished ripping all streams from $4"
         exit 0
     fi
 fi
