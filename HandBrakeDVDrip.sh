@@ -23,9 +23,12 @@ then
 	-c   MOVIENAME YEAR TITLE START_CHAPTER END_CHAPTER --CLIOPTIONS \n \
 	-cf  MOVIENAME YEAR TITLE START_CHAPTER END_CHAPTER --CLIOPTIONS \n \
 	-i   /path/to/video MOVIENAME YEAR --CLIOPTIONS \n \
-	-is  /path/to/video MOVIENAME YEAR --CLIOPTIONS \n"
+	-is  /path/to/video MOVIENAME YEAR --CLIOPTIONS \n \
+    Some commonly useful arguments to --CLIOPTIONS include: \n \
+    --crop 0:0:0:0 --crop 60:60:0:0 --start-at duration:NN --stop-at duration:NN \n" 
 	exit 1
 fi
+
 
 # identify the proper disk drive du moment
 DVD=$(mount | grep udf | cut -d ' ' -f 1)
