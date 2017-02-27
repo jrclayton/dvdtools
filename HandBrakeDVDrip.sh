@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-# TO DO : BUG - Fails if ISO mounted to desktop ie more than one result from udf grep
+# TO DO :
+#   BUG - Fails if image volume mounted to desktop results in return of more than one result from udf grep
+#   Sort out difference between -s and -is and -i
+#   Rewrite positional arguments more sophisticated-like
+#   general function for HB call
+
 
 # Bash Script to Rip all audio, video and subtitle tracks from a DVD using the HandBrakeCLI
 # Script based on my GUI preset
@@ -8,7 +13,7 @@
 # Check for arguments
 if [[ $# -eq '0' ]] || [[ $# -eq '1' ]] || [[ $# -eq '2' ]] ||
 	[[ $1 = '-a' && $# -ne '3' && $# -ne '4' ]] ||
-	[[ $1 = '-s' && $# -ne '3' ]] ||
+	[[ $1 = '-s' && $# -ne '3' && $# -ne '4' ]] ||
 	[[ $1 = '-i' && $# -ne '4' && $# -ne '5' ]] ||
 	[[ $1 = '-is' && $# -ne '4' && $# -ne '5' ]] ||
 	[[ $1 = '-t' && $# -ne '5' && $# -ne '6' ]] ||
@@ -18,14 +23,14 @@ then
 	echo -e "Usage: dvdrip [switch] MOVIENAME YEAR ... \n \
 	Select mode: either -a for all, -s to scan, -t for titles or -c for chapters or -i to change input source (add 'f' to merge chapters) \n \
 	-a   MOVIENAME YEAR --CLIOPTIONS \n \
-	-s   /path/to/source MOVIENAME \n \
+	-s   /path/to/source MOVIENAME (YEAR) \n \
 	-t   MOVIENAME YEAR TITLE_START TITLE_END --CLIOPTIONS \n \
 	-c   MOVIENAME YEAR TITLE START_CHAPTER END_CHAPTER --CLIOPTIONS \n \
 	-cf  MOVIENAME YEAR TITLE START_CHAPTER END_CHAPTER --CLIOPTIONS \n \
 	-i   /path/to/video MOVIENAME YEAR --CLIOPTIONS \n \
 	-is  /path/to/video MOVIENAME YEAR --CLIOPTIONS \n \
     Some commonly useful arguments to --CLIOPTIONS include: \n \
-    --crop 0:0:0:0 --crop 60:60:0:0 --start-at duration:NN --stop-at duration:NN \n" 
+    \"--crop 0:0:0:0\" \"--crop 60:60:0:0\" \"--start-at duration:NN\" \"--stop-at duration:NN\" \n"
 	exit 1
 fi
 
@@ -118,11 +123,11 @@ fi
 
 # To do a simple scan and summary of the DVD or a directory or iso
 if [ $1 = '-s' ]; then
-    if [ -e $DVD ]; then SOURCE=$DVD; else SOURCE=$2; fi
+    if [[ -e $DVD && ($2 = 'DVD' || $2 = 'dvd') ]]; then SOURCE=$DVD; else SOURCE=$2; fi
     # First get the number of titles on the disk by doing a scan (HB CLI and -t 0) and send STDERR to STDIN so it can be grepped
-    RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i $SOURCE 2>&1)
+    RAWOUT=$(HandBrakeCLI -t 0 --min-duration 4 -i "$SOURCE" 2>&1)
     # gives a nice summary of the scan including info about all streams
-	echo "$RAWOUT" | sed -nE '/libhb\: scan thread found [0-9]+ valid title\(s\)/,$p' | tee ~/Desktop/"$3"-scan.txt
+	echo "$RAWOUT" | sed -nE '/libhb\: scan thread found [0-9]+ valid title\(s\)/,$p' | tee ~/Desktop/"$3"-"$4"-scan.txt
 	exit 0
 fi
 
