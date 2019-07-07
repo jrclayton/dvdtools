@@ -48,8 +48,14 @@ then
 	fi
 fi
 
+# quits if you forget to remove arg $2 'dvd' or 'DVD' after scanning
+if [ $1 = '-a' ] && [ $2 = 'dvd' ] || [ $2 = 'DVD' ]; then
+    echo "Don't do that. You need to remove the path before ripping."
+    exit 2
+fi
+
 # make an appropriately named folder on the desktop
-# if --iso; then $3 $4
+# if --is; then $3 $4
 if [[ $1 = '-is' ]]
 then
 	mkdir ~/Desktop/"$3"\ \($4\)
@@ -58,7 +64,7 @@ elif ! [[ $1 = '-i' ]] && ! [[ $1 = '-s' ]]
 then
 	mkdir ~/Desktop/"$2"\ \($3\)
 fi
-# if -i; no folder
+# if -i or -s; no folder
 
 ### RIPPING OPTIONS ###
 
@@ -69,6 +75,7 @@ then
 	for i in `seq $5 $6`
 	do
 		HandBrakeCLI --verbose=1 --markers --title $4 --chapters $i --min-duration 4 --format av_mkv --encoder x264 --quality 20.0 --vfr --x264-preset slow --h264-profile high --h264-level 4.0 --audio 1,2,3,4,5,6,7,8,9 --aencoder copy ffaac--audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 --arate Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto --ab 192,192,192,192,192,192,192,192,192 --decomb --loose-anamorphic --modulus 2 --subtitle scan,1,2,3,4,5,6,7,8,9,10 --native-language eng --subtitle-forced scan $7 -i $DVD -o ~/Desktop/"$2"\ \($3\)/"$2"\ \($3\)\ -\ $4-$i.mkv
+
 	done
 
 	# Notifications
@@ -82,7 +89,7 @@ fi
 if [ $1 = '-cf' ]
 then
 	# range of chapters to rip returned from $5 and $6
-	HandBrakeCLI --verbose=1 --markers --title $4 --chapters $5-$6  --min-duration 4 --format av_mkv --encoder x264 --quality 20.0 --vfr --x264-preset slow --h264-profile high --h264-level 4.0 --audio 1,2,3,4,5,6,7,8,9 --aencoder copy ffaac--audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 --arate Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto --ab 192,192,192,192,192,192,192,192,192 --decomb --loose-anamorphic --modulus 2 --subtitle scan,1,2,3,4,5,6,7,8,9,10 --native-language eng --subtitle-forced scan $7 -i $DVD -o ~/Desktop/"$2"\ \($3\)/"$2"\ \($3\)\ -\ $4-fused-$5-$6.mkv
+	HandBrakeCLI --verbose=1 --markers --title $4 --chapters $5-$6  --min-duration 4 --format av_mkv --encoder x265 --quality 20.0 --vfr --x264-preset slow --h264-profile high --h264-level 4.0 --audio 1,2,3,4,5,6,7,8,9 --aencoder copy ffaac--audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 --arate Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto --ab 192,192,192,192,192,192,192,192,192 --decomb --loose-anamorphic --modulus 2 --subtitle scan,1,2,3,4,5,6,7,8,9,10 --native-language eng --subtitle-forced scan $7 -i $DVD -o ~/Desktop/"$2"\ \($3\)/"$2"\ \($3\)\ -\ $4-fused-$5-$6.mkv
 	
 	# Notifications
 	echo "Finished ripping fused chapters from title $4"
@@ -142,6 +149,7 @@ if [ $1 = '-a' ]; then
 	
 	do 
 		HandBrakeCLI --verbose=1 --markers --title $i --min-duration 4 --format av_mkv	--encoder x264 --quality 20.0 --vfr --x264-preset slow --h264-profile high --h264-level 4.0 --audio 1,2,3,4,5,6,7,8,9 --aencoder copy ffaac--audio-copy-mask aac,ac3,dtshd,dts,mp3 --audio-fallback ffac3 --arate Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto --ab 192,192,192,192,192,192,192,192,192 --decomb --loose-anamorphic --modulus 2 --subtitle scan,1,2,3,4,5,6,7,8,9,10 --native-language eng --subtitle-forced scan $4 -i $DVD -o ~/Desktop/"$2"\ \($3\)/"$2"\ \($3\)\ -\ $i.mkv
+
 	done
 	
 	# Notifications
